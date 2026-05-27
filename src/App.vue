@@ -42,6 +42,7 @@ interface LeafletClickEvent {
   latlng: { lat: number; lng: number }
 }
 function onMapClick(e: LeafletClickEvent) {
+  if (Date.now() < store.suppressMapClickUntil) return
   store.setLocation(e.latlng.lat, e.latlng.lng)
 }
 </script>

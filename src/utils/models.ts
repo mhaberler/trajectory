@@ -65,11 +65,69 @@ export function modelById(id: ModelId): ModelMeta | undefined {
   return MODELS.find((m) => m.id === id)
 }
 
-export function levelColor(level: number, minHpa = 10, maxHpa = 1000): string {
-  if (minHpa >= maxHpa) return 'hsl(0, 75%, 45%)'
+export function levelHue(level: number, minHpa = 10, maxHpa = 1000): number {
+  if (minHpa >= maxHpa) return 0
   const clamped = Math.max(minHpa, Math.min(maxHpa, level))
-  const t =
-    (Math.log(clamped) - Math.log(minHpa)) / (Math.log(maxHpa) - Math.log(minHpa))
-  const hue = 280 - t * 280
-  return `hsl(${hue.toFixed(0)}, 75%, 45%)`
+  const t = (Math.log(clamped) - Math.log(minHpa)) / (Math.log(maxHpa) - Math.log(minHpa))
+  return 280 - t * 280
+}
+
+export function levelColor(level: number, minHpa = 10, maxHpa = 1000): string {
+  return `hsl(${levelHue(level, minHpa, maxHpa).toFixed(0)}, 75%, 45%)`
+}
+
+function hslToRgb(h: number, s: number, l: number): [number, number, number] {
+  const c = (1 - Math.abs(2 * l - 1)) * s
+  const hp = h / 60
+  const x = c * (1 - Math.abs((hp % 2) - 1))
+  let r1 = 0,
+    g1 = 0,
+    b1 = 0
+  if (hp >= 0 && hp < 1) [r1, g1, b1] = [c, x, 0]
+  else if (hp < 2) [r1, g1, b1] = [x, c, 0]
+  else if (hp < 3) [r1, g1, b1] = [0, c, x]
+  else if (hp < 4) [r1, g1, b1] = [0, x, c]
+  else if (hp < 5) [r1, g1, b1] = [x, 0, c]
+  else [r1, g1, b1] = [c, 0, x]
+  const m = l - c / 2
+  return [
+    Math.round((r1 + m) * 255),
+    Math.round((g1 + m) * 255),
+    Math.round((b1 + m) * 255),
+  ]
+}
+
+export function levelColorHex(level: number, minHpa = 10, maxHpa = 1000): string {
+  const [r, g, b] = hslToRgb(levelHue(level, minHpa, maxHpa), 0.75, 0.45)
+  const hx = (n: number) => n.toString(16).padStart(2, '0').toUpperCase()
+  return `#${hx(r)}${hx(g)}${hx(b)}`
+}
+
+const GARMIN_HUE_BUCKETS: ReadonlyArray<readonly [number, string]> = [
+  [0, 'Red'],
+  [30, 'DarkYellow'],
+  [60, 'Yellow'],
+  [90, 'DarkGreen'],
+  [120, 'Green'],
+  [150, 'DarkCyan'],
+  [180, 'Cyan'],
+  [210, 'DarkBlue'],
+  [240, 'Blue'],
+  [270, 'DarkMagenta'],
+  [300, 'Magenta'],
+  [330, 'DarkRed'],
+]
+
+export function garminColorFromHue(hue: number): string {
+  const h = ((hue % 360) + 360) % 360
+  let best = GARMIN_HUE_BUCKETS[0]!
+  let bestD = 360
+  for (const entry of GARMIN_HUE_BUCKETS) {
+    const d = Math.min(Math.abs(h - entry[0]), 360 - Math.abs(h - entry[0]))
+    if (d < bestD) {
+      bestD = d
+      best = entry
+    }
+  }
+  return best[1]
 }

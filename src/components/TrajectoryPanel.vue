@@ -32,7 +32,11 @@
 
     <section>
       <label>Start time (local)</label>
-      <input v-model="store.startTime" type="datetime-local" />
+      <div class="row">
+        <button class="step" @click="shiftStart(-1)" title="−1 h">−1h</button>
+        <input v-model="store.startTime" type="datetime-local" />
+        <button class="step" @click="shiftStart(1)" title="+1 h">+1h</button>
+      </div>
     </section>
 
     <section>
@@ -85,6 +89,15 @@
       {{ store.computing ? 'Computing…' : 'Compute trajectories' }}
     </button>
 
+    <section v-if="hasTrajectories">
+      <label>Download</label>
+      <div class="dl-row">
+        <button @click="download('gpx')">GPX</button>
+        <button @click="download('kml')">KML</button>
+        <button @click="download('geojson')">GeoJSON</button>
+      </div>
+    </section>
+
     <div v-if="store.error" class="error">{{ store.error }}</div>
   </aside>
 </template>
@@ -95,6 +108,7 @@ import { useTrajectoryStore } from '@/stores/trajectory'
 import { applicableModels, levelColor, modelById } from '@/utils/models'
 import { geocode, type GeocodeHit } from '@/composables/useOpenMeteo'
 import { isaAltitudeM } from '@/utils/geo'
+import { exportTrajectories, type ExportFormat } from '@/utils/export'
 
 const store = useTrajectoryStore()
 const searchQuery = ref('')
@@ -151,6 +165,26 @@ function pick(h: GeocodeHit) {
   store.setLocation(h.latitude, h.longitude)
   hits.value = []
   searchQuery.value = h.name
+}
+
+const hasTrajectories = computed(() => Object.keys(store.trajectories).length > 0)
+
+function pad(n: number): string {
+  return String(n).padStart(2, '0')
+}
+function shiftStart(hours: number) {
+  const d = new Date(store.startTime)
+  if (isNaN(d.getTime())) return
+  d.setHours(d.getHours() + hours)
+  store.startTime = `${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}T${pad(d.getHours())}:${pad(d.getMinutes())}`
+}
+
+function download(format: ExportFormat) {
+  exportTrajectories(format, store.trajectories, {
+    startISO: store.startTimeISO,
+    modelId: store.modelId,
+    minHpa: store.minPressureHpa,
+  })
 }
 </script>
 
@@ -264,6 +298,36 @@ input[type='range'] {
 }
 .compute:disabled {
   background: #999;
+}
+.dl-row {
+  display: flex;
+  gap: 6px;
+}
+.dl-row button {
+  flex: 1;
+  padding: 6px 0;
+  background: white;
+  border: 1px solid #1976d2;
+  color: #1976d2;
+  border-radius: 4px;
+  cursor: pointer;
+  font-weight: 600;
+}
+.dl-row button:hover {
+  background: #1976d2;
+  color: white;
+}
+.step {
+  padding: 4px 8px;
+  background: white;
+  border: 1px solid #999;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 600;
+}
+.step:hover {
+  background: #eee;
 }
 .error {
   color: #b00;
