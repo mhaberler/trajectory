@@ -1,11 +1,11 @@
 <template>
-  <!-- Ensure the container has a explicit height/width or Leaflet won't render -->
-  <div style="height: 500px; width: 100%;">
+  <div style="height: 100vh; width: 100%; margin: 0; padding: 0;">
     <l-map
       ref="map"
       v-model:zoom="zoom"
       :center="center"
       :use-global-leaflet="false"
+      style="height: 100%; width: 100%;"
     >
       <l-tile-layer
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
