@@ -199,6 +199,13 @@ function download(format: ExportFormat) {
   border-right: 1px solid #ddd;
   font-size: 14px;
   box-sizing: border-box;
+  flex-shrink: 0;
+}
+@media (max-width: 600px) {
+  .panel {
+    width: 100vw;
+    border-right: none;
+  }
 }
 .panel h2,
 .panel label,

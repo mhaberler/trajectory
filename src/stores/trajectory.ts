@@ -53,6 +53,7 @@ export const useTrajectoryStore = defineStore('trajectory', () => {
   const error = ref<string | null>(null)
   const currentTimeMs = ref<number>(Date.now())
   const suppressMapClickUntil = ref<number>(0)
+  const panelOpen = ref<boolean>(true)
 
   const startTimeISO = computed(() => new Date(startTime.value).toISOString())
   const endTimeISO = computed(() =>
@@ -174,6 +175,7 @@ export const useTrajectoryStore = defineStore('trajectory', () => {
     error,
     currentTimeMs,
     suppressMapClickUntil,
+    panelOpen,
     startTimeISO,
     endTimeISO,
     setLocation,
