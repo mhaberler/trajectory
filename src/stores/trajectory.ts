@@ -56,6 +56,9 @@ export const useTrajectoryStore = defineStore('trajectory', () => {
 
   function setLocation(lat: number, lon: number) {
     location.value = { lat, lon }
+  }
+
+  function clearTrajectories() {
     trajectories.value = {}
   }
 
@@ -173,6 +176,7 @@ export const useTrajectoryStore = defineStore('trajectory', () => {
     startTimeISO,
     endTimeISO,
     setLocation,
+    clearTrajectories,
     toggleLevel,
     compute,
   }

@@ -72,6 +72,7 @@
     <button class="compute" :disabled="store.computing" @click="store.compute">
       {{ store.computing ? 'Computing…' : 'Compute trajectories' }}
     </button>
+    <button v-if="hasTrajectories" @click="store.clearTrajectories()">Clear</button>
 
     <section v-if="hasTrajectories">
       <label>Download</label>
