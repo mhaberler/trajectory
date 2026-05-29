@@ -12,7 +12,9 @@ const GFS_LEVELS: PressureLevel[] = [
   525, 500, 475, 450, 425, 400, 375, 350, 325, 300, 275, 250, 225, 200, 175, 150, 125, 100, 70, 50,
   40, 30, 20, 15, 10,
 ]
-const ECMWF_LEVELS: PressureLevel[] = [1000, 925, 850, 700, 600, 500, 400, 300, 250, 200, 150, 100, 50]
+const ECMWF_LEVELS: PressureLevel[] = [
+  1000, 925, 850, 700, 600, 500, 400, 300, 250, 200, 150, 100, 50,
+]
 const ICON_LEVELS: PressureLevel[] = [
   1000, 975, 950, 925, 900, 850, 800, 700, 600, 500, 400, 300, 250, 200, 150, 100, 70, 50, 30,
 ]
@@ -90,11 +92,7 @@ function hslToRgb(h: number, s: number, l: number): [number, number, number] {
   else if (hp < 5) [r1, g1, b1] = [x, 0, c]
   else [r1, g1, b1] = [c, 0, x]
   const m = l - c / 2
-  return [
-    Math.round((r1 + m) * 255),
-    Math.round((g1 + m) * 255),
-    Math.round((b1 + m) * 255),
-  ]
+  return [Math.round((r1 + m) * 255), Math.round((g1 + m) * 255), Math.round((b1 + m) * 255)]
 }
 
 export function levelColorHex(level: number, minHpa = 10, maxHpa = 1000): string {

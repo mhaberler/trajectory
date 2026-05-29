@@ -17,12 +17,7 @@
       >
         ⌖
       </button>
-      <button
-        class="recenter-btn"
-        :disabled="!hasData"
-        title="Fit trajectories"
-        @click="recenter"
-      >
+      <button class="recenter-btn" :disabled="!hasData" title="Fit trajectories" @click="recenter">
         ⛶
       </button>
       <div v-if="locateError" class="locate-err">{{ locateError }}</div>
@@ -31,7 +26,7 @@
         v-model:zoom="zoom"
         :center="mapCenter"
         :use-global-leaflet="false"
-        style="height: 100%; width: 100%;"
+        style="height: 100%; width: 100%"
         @click="onMapClick"
       >
         <l-tile-layer

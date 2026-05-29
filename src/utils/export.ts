@@ -30,10 +30,7 @@ function hexToKmlColor(hex: string): string {
   return `ff${b}${g}${r}`.toLowerCase()
 }
 
-export function toGPX(
-  trajectories: Record<number, Trajectory>,
-  meta: ExportMeta,
-): string {
+export function toGPX(trajectories: Record<number, Trajectory>, meta: ExportMeta): string {
   const tracks: string[] = []
   for (const [levelStr, traj] of Object.entries(trajectories)) {
     const level = Number(levelStr)
@@ -70,10 +67,7 @@ ${tracks.join('\n')}
 `
 }
 
-export function toKML(
-  trajectories: Record<number, Trajectory>,
-  meta: ExportMeta,
-): string {
+export function toKML(trajectories: Record<number, Trajectory>, meta: ExportMeta): string {
   const levels = Object.keys(trajectories).map(Number)
   const styles = levels
     .map((L) => {
@@ -118,7 +112,9 @@ export function toKML(
     </Placemark>`,
       )
       .join('\n')
-    placemarks.push(`  <Folder>\n    <name>${escapeXml(levelStr)} hPa</name>\n${line}\n${points}\n  </Folder>`)
+    placemarks.push(
+      `  <Folder>\n    <name>${escapeXml(levelStr)} hPa</name>\n${line}\n${points}\n  </Folder>`,
+    )
   }
   return `<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://www.opengis.net/kml/2.2">
@@ -132,10 +128,7 @@ ${placemarks.join('\n')}
 `
 }
 
-export function toGeoJSON(
-  trajectories: Record<number, Trajectory>,
-  meta: ExportMeta,
-): string {
+export function toGeoJSON(trajectories: Record<number, Trajectory>, meta: ExportMeta): string {
   const features: unknown[] = []
   for (const [levelStr, traj] of Object.entries(trajectories)) {
     const level = Number(levelStr)

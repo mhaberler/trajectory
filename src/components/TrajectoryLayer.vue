@@ -61,10 +61,7 @@
       :weight="2"
     />
   </template>
-  <l-marker
-    v-if="store.location"
-    :lat-lng="[store.location.lat, store.location.lon]"
-  >
+  <l-marker v-if="store.location" :lat-lng="[store.location.lat, store.location.lon]">
     <l-popup>Launch point</l-popup>
   </l-marker>
 </template>

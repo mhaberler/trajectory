@@ -5,11 +5,7 @@
     <section>
       <label>Search location</label>
       <div class="row">
-        <input
-          v-model="searchQuery"
-          placeholder="e.g. Vienna"
-          @keydown.enter="runSearch"
-        />
+        <input v-model="searchQuery" placeholder="e.g. Vienna" @keydown.enter="runSearch" />
         <button :disabled="searching" @click="runSearch">Go</button>
       </div>
       <ul v-if="hits.length" class="hits">
@@ -41,24 +37,12 @@
 
     <section>
       <label>Duration: {{ store.durationHours }} h</label>
-      <input
-        v-model.number="store.durationHours"
-        type="range"
-        min="1"
-        max="6"
-        step="1"
-      />
+      <input v-model.number="store.durationHours" type="range" min="1" max="6" step="1" />
     </section>
 
     <section>
       <label>Interval: {{ store.intervalMinutes }} min</label>
-      <input
-        v-model.number="store.intervalMinutes"
-        type="range"
-        min="5"
-        max="60"
-        step="5"
-      />
+      <input v-model.number="store.intervalMinutes" type="range" min="5" max="60" step="5" />
     </section>
 
     <section>
@@ -117,13 +101,9 @@ const searching = ref(false)
 
 const modelLevels = computed(() => modelById(store.modelId)?.levels ?? [])
 
-const visibleLevels = computed(() =>
-  modelLevels.value.filter((L) => L >= store.minPressureHpa),
-)
+const visibleLevels = computed(() => modelLevels.value.filter((L) => L >= store.minPressureHpa))
 
-const available = computed(() =>
-  store.location ? applicableModels(store.location) : [],
-)
+const available = computed(() => (store.location ? applicableModels(store.location) : []))
 
 function altLabel(hpa: number): string {
   const m = isaAltitudeM(hpa)

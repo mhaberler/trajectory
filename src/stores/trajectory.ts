@@ -1,12 +1,6 @@
 import { defineStore } from 'pinia'
 import { computed, ref, watch } from 'vue'
-import type {
-  LatLon,
-  ModelId,
-  PressureLevel,
-  Trajectory,
-  WindColumn,
-} from '@/types/trajectory'
+import type { LatLon, ModelId, PressureLevel, Trajectory, WindColumn } from '@/types/trajectory'
 import { fetchWindProfile } from '@/composables/useOpenMeteo'
 import { computeTrajectory, type WindSampler } from '@/composables/useTrajectory'
 import { interpolateWind } from '@/utils/geo'

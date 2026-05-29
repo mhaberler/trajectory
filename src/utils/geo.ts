@@ -40,8 +40,7 @@ export function haversineMeters(aLat: number, aLon: number, bLat: number, bLon: 
   const dLat = (bLat - aLat) * DEG
   const dLon = (bLon - aLon) * DEG
   const s =
-    Math.sin(dLat / 2) ** 2 +
-    Math.cos(aLat * DEG) * Math.cos(bLat * DEG) * Math.sin(dLon / 2) ** 2
+    Math.sin(dLat / 2) ** 2 + Math.cos(aLat * DEG) * Math.cos(bLat * DEG) * Math.sin(dLon / 2) ** 2
   return 2 * EARTH_R * Math.asin(Math.sqrt(s))
 }
 
